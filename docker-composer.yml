@@ -1,0 +1,24 @@
+version: '3'
+services:
+  app:
+    image: 'backend:latest'
+    volumes:
+      - /var/www/html/propsoft-backend:/var/www/html/
+    working_dir: /var/www/html
+    networks:
+      - laravel
+    ports:
+      - '8088:80'
+  mysql:
+    image: 'mysql:8.0'
+    volumes:
+      - .:/data
+    environment:
+      MYSQL_DATABASE: propsoft
+      MYSQL_ROOT_PASSWORD: 65gRtgd^hh@45sy
+    networks:
+      - laravel
+    ports:
+      - '3306:3306'
+networks:
+  laravel:
