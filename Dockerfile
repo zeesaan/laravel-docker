@@ -84,7 +84,7 @@ RUN chown -R www-data:www-data /var/www/html/
 #RUN php artisan config:cache
 
 #RUN php artisan route:cache
-# Optimizing View loading
+#Optimizing View loading
 #RUN php artisan view:cache
 EXPOSE 80
 
