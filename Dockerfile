@@ -80,7 +80,7 @@ WORKDIR /var/www/html/
 RUN chown -R www-data:www-data /var/www/html/
 
 #RUN composer install --no-interaction --optimize-autoloader --no-dev
-# Optimizing Configuration loading
+#Optimizing Configuration loading
 #RUN php artisan config:cache
 
 #RUN php artisan route:cache
