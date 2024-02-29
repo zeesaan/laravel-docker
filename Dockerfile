@@ -36,7 +36,6 @@ RUN sed -E -i   's/upload_max_filesize = 2M/upload_max_filesize = 3G/g' /etc/php
 RUN apt install -y curl
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-
 # Install nginx
 RUN apt install -y nginx
 RUN echo "\
