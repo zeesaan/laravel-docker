@@ -21,6 +21,7 @@ RUN apt install -y php8.1\
     php8.1-pdo\
     php8.1-imagick
 
+RUN apt install -y vim
 
 # Install php-fpm
 RUN apt install -y php8.1-fpm php8.1-cli
