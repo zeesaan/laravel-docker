@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Define variables
 DOCKER_USERNAME="admin"
 DOCKER_PASSWORD="Harbor12345"
