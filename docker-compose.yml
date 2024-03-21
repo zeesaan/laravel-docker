@@ -3,7 +3,7 @@ services:
   app:
     image: '192.168.226.131/propsoft-backend-side/backend:latest'
     volumes:
-      - /var/www/html/propsoft-backend-uat:/var/www/html/
+      - /var/www/html/propsoft-backend:/var/www/html/
     working_dir: /var/www/html
     networks:
       - laravel
