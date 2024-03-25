@@ -1,7 +1,7 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND noninteractive
-ENV NFS_SERVER_IP=192.168.226.132
+
 # Install dependencies
 RUN apt update
 RUN apt install -y software-properties-common
