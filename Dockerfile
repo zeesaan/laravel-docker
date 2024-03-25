@@ -24,7 +24,13 @@ RUN apt install -y php8.1\
 
 # Install php-fpm
 RUN apt install -y php8.1-fpm php8.1-cli
-
+# Install NFS
+RUN apt-get install -y nfs-common
+# Copy the startup script into the container
+COPY startup.sh /usr/local/bin/startup.sh
+RUN chmod +x /usr/local/bin/startup.sh
+# Set the startup script as the entry point
+ENTRYPOINT ["/usr/local/bin/startup.sh"]
 #php fpm tuning
 RUN sed -E -i   's/upload_max_filesize = 2M/upload_max_filesize = 3G/g' /etc/php/8.1/fpm/php.ini && \
     sed -E -i   's/post_max_size = 8M/post_max_size = 1G/g' /etc/php/8.1/fpm/php.ini && \
@@ -72,7 +78,7 @@ RUN echo "\
     tail -s 1 /var/log/nginx/*.log -f\n\
     " > /start.sh
 
-#COPY composer.json /var/www/html/
+COPY . /var/www/html/
 WORKDIR /var/www/html/
 
 RUN chown -R www-data:www-data /var/www/html/
@@ -88,3 +94,4 @@ RUN chown -R www-data:www-data /var/www/html/
 EXPOSE 80
 
 CMD ["sh", "/start.sh"]
+
