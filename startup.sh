@@ -21,7 +21,7 @@ mount_nfs_from_fstab() {
                 # Create mount point directory if it doesn't exist
                 mkdir -p "$mountpoint"
                 # Mount the NFS share using NFS_SERVER_IP
-                mount -t nfs "$NFS_SERVER_IP:$share" "$mountpoint"
+                mount -t nfs "$NFS_SERVER_IP:$NFS_SHARE" /var/www/html
             fi
         done < /etc/fstab
     else
