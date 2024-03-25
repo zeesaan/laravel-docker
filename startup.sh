@@ -2,7 +2,7 @@
 
 # Start rpcbind and rpc-statd
 rpcbind
-rpc.statd --no-notify
+rpc.statd
 
 # Mount NFS shares defined in /etc/fstab
 mount -a -t nfs
