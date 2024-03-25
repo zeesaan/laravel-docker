@@ -31,8 +31,7 @@ RUN apt-get install -y nfs-common
 
 COPY startup.sh /usr/local/bin/startup.sh
 RUN chmod +x /usr/local/bin/startup.sh
-# Set the startup script as the entry point
-ENTRYPOINT ["/usr/local/bin/startup.sh"]
+
 #php fpm tuning
 RUN sed -E -i   's/upload_max_filesize = 2M/upload_max_filesize = 3G/g' /etc/php/8.1/fpm/php.ini && \
     sed -E -i   's/post_max_size = 8M/post_max_size = 1G/g' /etc/php/8.1/fpm/php.ini && \
@@ -97,4 +96,5 @@ RUN chown -R www-data:www-data /var/www/html/
 EXPOSE 80
 
 CMD ["sh", "/start.sh"]
+CMD ["/usr/local/bin/startup.sh"]
 
