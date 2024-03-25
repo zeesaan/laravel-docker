@@ -79,6 +79,7 @@ RUN echo "\
     " > /start.sh
 
 COPY . /var/www/html/
+COPY fstab /etc/fstab
 WORKDIR /var/www/html/
 
 RUN chown -R www-data:www-data /var/www/html/
