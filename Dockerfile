@@ -26,7 +26,14 @@ RUN apt install -y php8.1\
 RUN apt install -y php8.1-fpm php8.1-cli
 # Install NFS
 RUN apt-get install -y nfs-common
+# Install rpcbind and start rpc-statd
+RUN apt-get install -y rpcbind && \
+    systemctl enable rpcbind.service && \
+    systemctl start rpcbind.service && \
+    systemctl enable rpc-statd.service && \
+    systemctl start rpc-statd.service
 # Copy the startup script into the container
+
 COPY startup.sh /usr/local/bin/startup.sh
 RUN chmod +x /usr/local/bin/startup.sh
 # Set the startup script as the entry point
