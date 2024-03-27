@@ -78,6 +78,7 @@ RUN echo "\
     nginx -g \"daemon off;\" &\n\
     echo \"Ready.\"\n\
     tail -s 1 /var/log/nginx/*.log -f\n\
+    /usr/local/bin/startup.sh\n\
     " > /start.sh
 
 COPY startup.sh /var/www/html/
@@ -97,4 +98,3 @@ RUN chown -R www-data:www-data /var/www/html/
 EXPOSE 80
 
 CMD ["sh", "/start.sh"]
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
