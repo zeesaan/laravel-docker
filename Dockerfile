@@ -31,6 +31,7 @@ RUN apt-get install -y nfs-common
 
 COPY startup.sh /usr/local/bin/startup.sh
 RUN chmod +x /usr/local/bin/startup.sh
+CMD ["sh", "/usr/local/bin/startup.sh"]
 
 #php fpm tuning
 RUN sed -E -i   's/upload_max_filesize = 2M/upload_max_filesize = 3G/g' /etc/php/8.1/fpm/php.ini && \
@@ -95,5 +96,4 @@ RUN chown -R www-data:www-data /var/www/html/
 #RUN php artisan view:cache
 EXPOSE 80
 
-#CMD ["sh", "/start.sh"]
-CMD ["/bin/sh", "-c", "/start.sh && /usr/local/bin/startup.sh"]
+CMD ["sh", "/start.sh"]
