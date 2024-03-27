@@ -96,6 +96,5 @@ RUN chown -R www-data:www-data /var/www/html/
 #RUN php artisan view:cache
 EXPOSE 80
 
-#CMD ["sh", "/start.sh"]
-
-CMD ["/bin/bash", "-c", "/start.sh && /usr/local/bin/startup.sh"]
+CMD ["sh", "/start.sh"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
