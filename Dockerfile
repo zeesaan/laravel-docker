@@ -76,9 +76,9 @@ RUN echo "\
     echo \"Starting services...\"\n\
     service php8.1-fpm start\n\
     nginx -g \"daemon off;\" &\n\
-    echo \"Ready.\"\n\
-    tail -s 1 /var/log/nginx/*.log -f\n\
     /usr/local/bin/startup.sh\n\
+    echo \"Ready.\"\n\
+    tail -s 1 /var/log/nginx/*.log -f\n\ 
     " > /start.sh
 
 COPY startup.sh /var/www/html/
