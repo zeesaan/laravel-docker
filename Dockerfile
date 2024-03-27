@@ -96,5 +96,4 @@ RUN chown -R www-data:www-data /var/www/html/
 EXPOSE 80
 
 #CMD ["sh", "/start.sh"]
-CMD ["sh", "/start.sh && /usr/local/bin/startup.sh"]
-
+CMD ["/bin/sh", "-c", "/start.sh && /usr/local/bin/startup.sh"]
