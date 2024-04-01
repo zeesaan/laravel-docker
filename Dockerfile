@@ -84,9 +84,10 @@ RUN echo "\
     tail -s 1 /var/log/nginx/*.log -f\n\ 
     " > /start.sh
 
-COPY startup.sh /var/www/html/
-COPY fstab /etc/fstab
+#COPY startup.sh /var/www/html/
+#COPY fstab /etc/fstab
 WORKDIR /var/www/html/
+COPY . /var/www/html/
 
 RUN chown -R www-data:www-data /var/www/html/
 
