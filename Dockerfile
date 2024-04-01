@@ -26,6 +26,9 @@ RUN apt install -y php8.1\
 RUN apt install -y php8.1-fpm php8.1-cli
 # Install NFS
 RUN apt-get install -y nfs-common
+#Install Supervisor
+RUN apt-get install -y supervisor
+COPY laravel_queue.conf queue_listen.conf /etc/supervisor/conf.d/
 
 # Copy the startup script into the container
 
