@@ -1,4 +1,3 @@
 # /etc/fstab
 # NFS shares
-#192.168.226.132:/nfsfileshare/propsoft-backend /var/www/html nfs defaults,nolock 0 0
-192.168.226.132:/nfsfileshare/propsoft-backend /var/www/html nfs  rw,sync  0  0
+192.168.226.132:/nfsfileshare/propsoft-backend /var/www/html nfs defaults,nolock 0 0
