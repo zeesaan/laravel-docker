@@ -88,6 +88,7 @@ RUN echo "\
 WORKDIR /var/www/html/
 COPY . /var/www/html/
 
+RUN chown root:root /run/rpcbind
 RUN /etc/init.d/rpcbind start
 
 # Add an entry to /etc/fstab
