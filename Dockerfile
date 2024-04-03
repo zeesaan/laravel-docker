@@ -32,8 +32,8 @@ COPY laravel_queue.conf queue_listen.conf /etc/supervisor/conf.d/
 
 # Copy the startup script into the container
 
-COPY startup.sh /usr/local/bin/startup.sh
-RUN chmod +x /usr/local/bin/startup.sh
+#COPY startup.sh /usr/local/bin/startup.sh
+#RUN chmod +x /usr/local/bin/startup.sh
 
 
 #php fpm tuning
@@ -79,7 +79,6 @@ RUN echo "\
     echo \"Starting services...\"\n\
     service php8.1-fpm start\n\
     nginx -g \"daemon off;\" &\n\
-    /usr/local/bin/startup.sh\n\
     echo \"Ready.\"\n\
     tail -s 1 /var/log/nginx/*.log -f\n\ 
     " > /start.sh
@@ -91,6 +90,10 @@ COPY . /var/www/html/
 
 RUN chown -R www-data:www-data /var/www/html/
 
+# Add an entry to /etc/fstab
+RUN echo "192.168.226.132:/nfsfileshare/propsoft-backend /var/www/html nfs defaults 0 0" >> /etc/fstab
+# Mount the network file share
+RUN mount -a
 
 #RUN composer install --no-interaction --optimize-autoloader --no-dev
 #Optimizing Configuration loading
