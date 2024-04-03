@@ -90,8 +90,12 @@ COPY . /var/www/html/
 
 RUN chown -R www-data:www-data /var/www/html/
 
+RUN chown -R root:root /run/rpcbind /var/lib/rpcbind
+RUN chmod 0755 /run/rpcbind /var/lib/rpcbind
+
 RUN service rpcbind start
 RUN service rpc.statd start
+
 # Add an entry to /etc/fstab
 RUN echo "192.168.226.132:/nfsfileshare/propsoft-backend /var/www/html nfs defaults 0 0" >> /etc/fstab
 # Mount the network file share
