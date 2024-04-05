@@ -32,8 +32,8 @@ COPY laravel_queue.conf queue_listen.conf /etc/supervisor/conf.d/
 
 # Copy the startup script into the container
 
-COPY startup.sh /usr/local/bin/startup.sh
-RUN chmod +x /usr/local/bin/startup.sh
+#COPY startup.sh /usr/local/bin/startup.sh
+#RUN chmod +x /usr/local/bin/startup.sh
 
 
 #php fpm tuning
@@ -79,7 +79,6 @@ RUN echo "\
     echo \"Starting services...\"\n\
     service php8.1-fpm start\n\
     nginx -g \"daemon off;\" &\n\
-    /usr/local/bin/startup.sh\n\
     echo \"Ready.\"\n\
     tail -s 1 /var/log/nginx/*.log -f\n\ 
     " > /start.sh
