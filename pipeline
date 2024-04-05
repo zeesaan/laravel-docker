@@ -1,0 +1,185 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_USERNAME="admin"
+        DOCKER_PASSWORD="Harbor12345"
+        DOCKER_IMAGE_NAME="backend"
+        DOCKER_IMAGE_TAG = "latest"
+        DOCKER_NAME = "propsoft-backend_app_1"
+        HARBOR_URL="https://192.168.226.131"
+        HARBOR_REPO = "192.168.226.131"
+        HARBOR_REPOSITORY="propsoft-backend-side"
+		DOCKERFILE_PATH = './Dockerfile'
+		SSH_KEY = "$HOME/.ssh/id_rsa"
+        SSH_USER = 'devops'
+        REMOTE_HOST = '192.168.226.133'
+        REMOTE_HOST2 = '192.168.226.134'
+        REMOTE_DIR = '/var/www/html/propsoft-backend'
+        REMOTE_DIR2 = '/var/www/html/propsoft-backend'
+        HOST_VOLUME_PATH = '/var/www/html/propsoft-backend'
+        CONTAINER_VOLUME_PATH = '/var/www/html/'
+        
+        DB_HOST= '192.168.226.136'
+		DB_DATABASE="propsoft_stg"
+        DB_USERNAME="appadmin"
+        DB_PASSWORD="'aS4j2dH#fd!i3D'"
+        APP_URL="http://api.apexsofttest.com"
+        CLIENT_APP_URL="http://app.apexsofttest.com"
+        APP_DEBUG="true"
+        QUEUE_CONNECTION="database"
+        APP_KEY="base64:TE6vmE53MKKy3W5Ze2xLCTjmmBaLgiPerblMxBYMqL0="
+        APP_ENV_MODE="beta-production"
+        FILESYSTEM_DRIVER="do_spaces"
+        MAIL_MAILER="smtp"
+        MAIL_HOST="propsoft.ai"
+        MAIL_PORT="465"
+        MAIL_USERNAME="support@propsoft.ai"
+        MAIL_PASSWORD="'Rd=K@oFUqBg}'"
+        JWT_SECRET="5VJsZVGCcZ8BVAZBvJfsNbzpY2R4i9VFVmgO4Ckp9LqfUSSgEWgfPHM82FfkQ0ZN"
+        FIREBASE_CREDENTIALS="/storage/app/firebase/propsoft-36752-firebase-adminsdk-5kea2-ef8d975f43.json"
+        FIREBASE_DATABASE_URL="https://propsoft-36752-default-rtdb.firebaseio.com"
+        IMAGE_DRIVER="imagick"
+        DO_SPACES_KEY="DO002TERT83Z9ZAREKHY"
+        DO_SPACES_SECRET="3DpqZjc8+eKYZ7b+mt/xsnv/BVNDnNxPQ/bw5xSmD1s"
+        DO_SPACES_ENDPOINT="https://nyc3.digitaloceanspaces.com"
+        DO_SPACES_REGION="nyc3"
+        DO_SPACES_BUCKET="propsoft-demo"
+        DO_URL="https://propsoft-demo.nyc3.cdn.digitaloceanspaces.com"
+		
+		
+	
+		
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout your Laravel project's repository
+                git branch: 'main', credentialsId: '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', url: 'https://github.com/zeesaan/laravel-docker.git'
+            }
+        }
+      
+        
+        stage('Approval') {
+            steps {
+                input "Proceed with deployment?"
+            }
+        }
+	  
+        stage('Change env') {
+            steps {
+                script {
+                    sh '''
+                    echo "Updating .env file with Jenkins environment variables..."
+                    cp .env.example .env
+                    sed -i "s|^DB_HOST=.*|DB_HOST=${DB_HOST=}|" .env
+                    sed -i "s|^DB_DATABASE=.*|DB_DATABASE=${DB_DATABASE}|" .env
+                    sed -i "s|^DB_USERNAME=.*|DB_USERNAME=${DB_USERNAME}|" .env
+                    sed -i "s|^DB_PASSWORD=.*|DB_PASSWORD=${DB_PASSWORD}|" .env
+                    sed -i "s|^APP_URL=.*|APP_URL=${APP_URL}|" .env
+                    sed -i "s|^CLIENT_APP_URL=.*|CLIENT_APP_URL=${CLIENT_APP_URL}|" .env
+                    sed -i "s|^APP_DEBUG=.*|APP_DEBUG=${APP_DEBUG}|" .env
+                    sed -i "s|^QUEUE_CONNECTION=.*|QUEUE_CONNECTION=${QUEUE_CONNECTION}|" .env
+                    sed -i "s|^APP_KEY=.*|APP_KEY=${APP_KEY}|" .env
+                    sed -i "s|^APP_ENV_MODE=.*|APP_ENV_MODE=${APP_ENV_MODE}|" .env
+                    sed -i "s|^FILESYSTEM_DRIVER=.*|FILESYSTEM_DRIVER=${FILESYSTEM_DRIVER}|" .env
+                    sed -i "s|^MAIL_MAILER=.*|MAIL_MAILER=${MAIL_MAILER}|" .env
+                    sed -i "s|^MAIL_HOST=.*|MAIL_HOST=${MAIL_HOST}|" .env
+                    sed -i "s|^MAIL_PORT=.*|MAIL_PORT=${MAIL_PORT}|" .env
+                    sed -i "s|^MAIL_USERNAME=.*|MAIL_USERNAME=${MAIL_USERNAME}|" .env
+                    sed -i "s|^MAIL_PASSWORD=.*|MAIL_PASSWORD=${MAIL_PASSWORD}|" .env
+                    sed -i "s|^JWT_SECRET=.*|JWT_SECRET=${JWT_SECRET}|" .env
+                    sed -i "s|^FIREBASE_CREDENTIALS=.*|FIREBASE_CREDENTIALS=${FIREBASE_CREDENTIALS}|" .env
+                    sed -i "s|^FIREBASE_DATABASE_URL=.*|FIREBASE_DATABASE_URL=${FIREBASE_DATABASE_URL}|" .env
+                    sed -i "s|^IMAGE_DRIVER=.*|IMAGE_DRIVER=${IMAGE_DRIVER}|" .env
+                    sed -i "s|^DO_SPACES_KEY=.*|DO_SPACES_KEY=${DO_SPACES_KEY}|" .env
+                    sed -i "s|^DO_SPACES_SECRET=.*|DO_SPACES_SECRET=${DO_SPACES_SECRET}|" .env
+                    sed -i "s|^DO_SPACES_ENDPOINT=.*|DO_SPACES_ENDPOINT=${DO_SPACES_ENDPOINT}|" .env
+                    sed -i "s|^DO_SPACES_REGION=.*|DO_SPACES_REGION=${DO_SPACES_REGION}|" .env
+                    sed -i "s|^DO_SPACES_BUCKETL=.*|DO_SPACES_BUCKET=${DO_SPACES_BUCKET}|" .env
+                    sed -i "s|^DO_URL=.*|DO_URL=${DO_URL}|" .env
+                    '''
+                }
+            }
+
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Build Docker image
+                    docker.build("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}", "-f ${DOCKERFILE_PATH} .")
+                }
+            }
+        }
+
+        stage('Tag Docker Image') {
+            steps {
+                script {
+                    // Tag your Docker image
+                    sh "docker tag ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} ${HARBOR_REPO}/propsoft-backend-side/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+                }
+            }
+        }
+
+        stage('Push to Harbor') {
+            steps {
+                script {
+                    docker.withRegistry("${HARBOR_URL}", 'harbor_password') {
+                        docker.image("${HARBOR_REPO}/propsoft-backend-side/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}").push()
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Server 1') {
+            steps {
+                script {
+                    // SSH into the remote server and deploy Docker container
+                    sshagent(['node1-ssh-credentials-id']) {
+                        sh """
+                            ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${SSH_USER}@${REMOTE_HOST} \
+                            "docker pull ${HARBOR_REPO}/${HARBOR_REPOSITORY}/${DOCKER_IMAGE_NAME}:latest && \
+                            docker stop ${DOCKER_NAME} || true && \
+                            docker rm ${DOCKER_NAME} || true && \
+                            docker run -d --privileged --name ${DOCKER_NAME}  -p 8080:80 -v ${HOST_VOLUME_PATH}:${CONTAINER_VOLUME_PATH} ${HARBOR_REPO}/${HARBOR_REPOSITORY}/${DOCKER_IMAGE_NAME}:latest"
+                        """
+                    }
+                }
+            }
+        }
+
+    stage('Deploy to Server 2') {
+            steps {
+                script {
+                    // SSH into the remote server and deploy Docker container
+                    sshagent(['node2-ssh-credentials-id']) {
+                        sh """
+                            ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${SSH_USER}@${REMOTE_HOST2} \
+                            "docker pull ${HARBOR_REPO}/${HARBOR_REPOSITORY}/${DOCKER_IMAGE_NAME}:latest && \
+                            docker stop ${DOCKER_NAME} || true && \
+                            docker rm ${DOCKER_NAME} || true && \
+                            docker run -d --privileged --name ${DOCKER_NAME}  -p 8080:80 -v ${HOST_VOLUME_PATH}:${CONTAINER_VOLUME_PATH} ${HARBOR_REPO}/${HARBOR_REPOSITORY}/${DOCKER_IMAGE_NAME}:latest"
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Run Migration') {
+            steps {
+                script {
+                    // SSH into the remote server and run migration
+                    sshagent(['node1-ssh-credentials-id']) {
+                        sh """
+                            ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${SSH_USER}@${REMOTE_HOST} \
+                            "docker exec ${DOCKER_NAME} php artisan optimize:clear && \
+                            docker exec ${DOCKER_NAME} php artisan migrate || true"
+                        """
+                    }
+                }
+            }
+        }
+    }
+}
