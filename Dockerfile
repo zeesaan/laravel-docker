@@ -86,7 +86,7 @@ RUN echo "\
 
 #COPY startup.sh /var/www/html/
 
-COPY fstab /etc/fstab
+#COPY fstab /etc/fstab
 WORKDIR /var/www/html/
 COPY . /var/www/html/
 
