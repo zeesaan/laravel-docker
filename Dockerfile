@@ -33,7 +33,7 @@ COPY laravel_queue.conf queue_listen.conf /etc/supervisor/conf.d/
 RUN sed -E -i   's/upload_max_filesize = 2M/upload_max_filesize = 3G/g' /etc/php/8.1/fpm/php.ini && \
     sed -E -i   's/post_max_size = 8M/post_max_size = 1G/g' /etc/php/8.1/fpm/php.ini && \
     sed -E -i   's/memory_limit = 128M/memory_limit = 4G/g' /etc/php/8.1/fpm/php.ini && \
-    sed -E -i   's/max_input_time = 60/max_input_time = 120/g' /etc/php/8.1/fpm/php.ini    
+    sed -E -i   's/max_input_time = 60/max_input_time = 120/g' /etc/php/8.1/fpm/php.ini
 
 
 # Install composer
